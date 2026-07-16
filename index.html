@@ -3,83 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caminante Andante Infinito - Ecuador</title>
+    <title>Salta conmigo - Juego de Ecuador</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        html, body { overflow: hidden; width: 100%; height: 100%; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+        html, body { width: 100%; height: 100%; overflow: hidden; }
 
-        /* PANTALLAS */
-        .pantalla { display: none; width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
-        .activa { display: flex; }
-
-        /* 🎬 PANTALLA DE INICIO */
+        /* --- PANTALLA DE INICIO --- */
         #inicio {
-            background: linear-gradient(to bottom, #87CEEB 0%, #E0F7FA 50%, #F0F9FF 100%);
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 25px;
+            gap: 30px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: 500;
         }
-        .logo-juego { font-size: 90px; animation: flotar 3s ease-in-out infinite; }
-        @keyframes flotar {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
+
+        .logo-juego {
+            font-size: 120px;
+            animation: saltar 1.5s ease-in-out infinite;
         }
-        #inicio h1 { font-size: 42px; color: #1E40AF; font-weight: bold; text-align: center; }
-        #inicio p { font-size: 18px; color: #374151; max-width: 400px; text-align: center; line-height: 1.5; }
+
+        @keyframes saltar {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(15deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        #inicio h1 {
+            font-size: 48px;
+            color: #1E40AF;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        #inicio p {
+            font-size: 20px;
+            color: #374151;
+            text-align: center;
+            max-width: 400px;
+        }
+
         .boton-iniciar {
-            padding: 18px 45px;
-            font-size: 22px;
+            padding: 20px 50px;
+            font-size: 24px;
             font-weight: bold;
             background: #16A34A;
             color: white;
             border: none;
-            border-radius: 16px;
+            border-radius: 20px;
             cursor: pointer;
-            box-shadow: 0 6px 20px rgba(22,163,74,0.4);
-            transition: all 0.2s;
-            z-index: 600;
+            box-shadow: 0 8px 25px rgba(22, 163, 74, 0.4);
+            transition: all 0.2s ease;
         }
-        .boton-iniciar:hover { transform: scale(1.05); }
-        .boton-iniciar:active { transform: scale(0.98); }
 
-        /* 🎮 PANTALLA DE JUEGO */
+        .boton-iniciar:hover {
+            transform: scale(1.05);
+            background: #15803D;
+        }
+
+        /* --- PANTALLA DEL JUEGO --- */
         #juego {
             background: #f0f0f0;
             background-image: radial-gradient(#cccccc 20%, transparent 20%);
             background-position: 0 0;
             background-size: 40px 40px;
-            position: relative;
-            overflow: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
         }
+
         .barra-superior {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            padding: 12px 15px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.95);
             border-bottom: 3px solid #16A34A;
             z-index: 100;
         }
-        #puntuacion { font-size: 22px; font-weight: bold; color: #1E40AF; }
-        #boton-tienda {
-            padding: 8px 16px;
-            background: #F59E0B;
-            color: white;
-            border: none;
-            border-radius: 8px;
+
+        #puntuacion {
+            font-size: 24px;
             font-weight: bold;
-            cursor: pointer;
-            font-size: 15px;
+            color: #1E40AF;
         }
 
-        /* MENSAJE DE CHOQUE */
+        .boton-barra {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        #boton-volver {
+            background: #F59E0B;
+            color: white;
+        }
+
+        #boton-tienda {
+            background: #8B5CF6;
+            color: white;
+        }
+
+        /* --- MENSAJE DE FIN DE JUEGO --- */
         #mensaje {
             position: absolute;
             top: 50%;
@@ -87,134 +129,229 @@
             transform: translate(-50%, -50%);
             text-align: center;
             background: white;
-            padding: 25px;
-            border-radius: 14px;
-            border: 3px solid #16A34A;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            padding: 30px;
+            border-radius: 20px;
+            border: 4px solid #16A34A;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             z-index: 200;
             display: none;
-            min-width: 300px;
+            min-width: 350px;
         }
-        #mensaje h1 { font-size: 32px; color: #DC2626; margin-bottom: 8px; }
-        #mensaje p { font-size: 16px; margin-bottom: 15px; color: #374151; }
+
+        #mensaje h1 {
+            font-size: 36px;
+            color: #DC2626;
+            margin-bottom: 15px;
+        }
+
+        #mensaje p {
+            font-size: 18px;
+            color: #374151;
+            margin-bottom: 25px;
+        }
+
         .boton {
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.2s;
+        }
+
+        .boton-primario {
             background: #16A34A;
             color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            margin: 4px;
-            font-weight: bold;
         }
-        .boton-secundario { background: #1E40AF; }
 
-        /* ELEMENTOS DEL JUEGO */
+        .boton-secundario {
+            background: #1E40AF;
+            color: white;
+        }
+
+        /* --- ELEMENTOS DEL JUEGO --- */
         #jugador {
             position: absolute;
-            width: 50px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             bottom: 120px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
-            font-size: 45px;
+            font-size: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: transform 0.1s;
         }
-        .obstaculo { position: absolute; background: #6B7280; border-radius: 6px; }
-        .plataforma { position: absolute; background: #854D0E; border-radius: 6px; }
-        .nube { position: absolute; background: white; border-radius: 50%; opacity: 0.8; }
 
-        /* TIENDA */
+        .obstaculo {
+            position: absolute;
+            background: #6B7280;
+            border-radius: 8px;
+        }
+
+        .plataforma {
+            position: absolute;
+            background: #854D0E;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .nube {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- TIENDA DE PERSONAJES --- */
         #tienda {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0, 0, 0, 0.9);
             z-index: 300;
-            padding: 20px;
+            padding: 30px;
             overflow-y: auto;
             display: none;
         }
-        .cabecera-tienda { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .cabecera-tienda h2 { color: white; font-size: 26px; }
-        .boton-cerrar { background: #DC2626; color: white; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .lista-skins { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
+
+        .cabecera-tienda {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .cabecera-tienda h2 {
+            color: white;
+            font-size: 32px;
+        }
+
+        .boton-cerrar {
+            background: #DC2626;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .lista-skins {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 20px;
+        }
+
         .tarjeta-skin {
             background: white;
-            border-radius: 10px;
-            padding: 12px;
+            border-radius: 15px;
+            padding: 20px;
             text-align: center;
             cursor: pointer;
-            border: 3px solid transparent;
+            border: 4px solid transparent;
+            transition: all 0.3s;
         }
-        .tarjeta-skin.seleccionada { border-color: #16A34A; background: #F0FDF4; }
-        .tarjeta-skin.bloqueada { opacity: 0.6; cursor: not-allowed; }
-        .icono-skin { font-size: 40px; margin-bottom: 6px; }
-        .nombre-skin { font-weight: bold; font-size: 13px; margin-bottom: 4px; }
-        .condicion-skin { font-size: 11px; color: #6B7280; }
-        .desbloqueado { color: #16A34A; font-weight: bold; font-size: 12px; }
+
+        .tarjeta-skin.seleccionada {
+            border-color: #16A34A;
+            background: #F0FDF4;
+            transform: scale(1.05);
+        }
+
+        .tarjeta-skin.bloqueada {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .icono-skin {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .nombre-skin {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .condicion-skin {
+            font-size: 13px;
+            color: #6B7280;
+        }
+
+        .desbloqueado {
+            color: #16A34A;
+            font-weight: bold;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
 
 <!-- PANTALLA DE INICIO -->
-<div id="inicio" class="pantalla activa">
-    <div class="logo-juego">🧑‍🦰✈️</div>
-    <h1>Caminante Andante Infinito</h1>
+<div id="inicio" class="pantalla-activa">
+    <div class="logo-juego">🧑‍🦰💨</div>
+    <h1>Salta conmigo</h1>
     <p>Recorre los cielos de los Andes, supera obstáculos y desbloquea personajes típicos del Ecuador 🇪🇨</p>
     <button class="boton-iniciar" id="btnIniciar">EMPEZAR A JUGAR</button>
 </div>
 
-<!-- PANTALLA DE JUEGO -->
-<div id="juego" class="pantalla">
+<!-- PANTALLA DEL JUEGO -->
+<div id="juego">
     <div class="barra-superior">
         <div id="puntuacion">Altura: 0 m</div>
-        <button id="boton-tienda" onclick="abrirTienda()">👕 Tienda</button>
+        <div>
+            <button class="boton-barra" id="boton-volver" onclick="volverAlInicio()">⏮️ Volver</button>
+            <button class="boton-barra" id="boton-tienda" onclick="abrirTienda()">👕 Tienda</button>
+        </div>
     </div>
 
     <div id="mensaje">
         <h1>¡Choque!</h1>
         <p>Llegaste hasta <span id="altura-final">0</span> metros</p>
         <p id="desbloqueo-nuevo"></p>
-        <button class="boton" onclick="reiniciar()">VOLVER A SUBIR</button>
+        <button class="boton boton-primario" onclick="reiniciar()">VOLVER A SUBIR</button>
         <button class="boton boton-secundario" onclick="abrirTienda()">VER TIENDA</button>
     </div>
 
-    <div id="jugador">🇪🇨</div>
+    <div id="jugador">🧑‍🦰</div>
 </div>
 
-<!-- TIENDA -->
+<!-- PANTALLA DE LA TIENDA -->
 <div id="tienda">
     <div class="cabecera-tienda">
-        <h2>Tienda de Personajes 🇪🇨</h2>
+        <h2>Personajes Típicos 🇪🇨</h2>
         <button class="boton-cerrar" onclick="cerrarTienda()">✖ Cerrar</button>
     </div>
     <div class="lista-skins" id="lista-skins"></div>
 </div>
 
 <script>
-// 📋 PERSONAJES
+// --- LISTA DE PERSONAJES TÍPICOS DEL ECUADOR ---
 const skins = [
-    { id: 'ecuador', icono: '🇪🇨', nombre: 'Ecuatoriano', minAltura: 0, desbloqueado: true },
-    { id: 'sierra', icono: '🧢', nombre: 'Campesino de la Sierra', minAltura: 500, desbloqueado: false },
-    { id: 'costa', icono: '🏖️', nombre: 'Montuvio de la Costa', minAltura: 1000, desbloqueado: false },
-    { id: 'amazonia', icono: '🌿', nombre: 'Comunidad Shuar', minAltura: 1500, desbloqueado: false },
-    { id: 'galapagos', icono: '🐢', nombre: 'Isleño de Galápagos', minAltura: 2000, desbloqueado: false },
-    { id: 'chola', icono: '👒', nombre: 'Chola Cuencana', minAltura: 2500, desbloqueado: false },
-    { id: 'yaravi', icono: '🎻', nombre: 'Músico Andino', minAltura: 3000, desbloqueado: false },
-    { id: 'condor', icono: '🦅', nombre: 'El Cóndor Andino', minAltura: 4000, desbloqueado: false }
+    { id: 'chola', icono: '👩‍🎤', nombre: 'Chola Cuencana', minAltura: 0, desbloqueado: true },
+    { id: 'campesino', icono: '🧑‍🌾', nombre: 'Campesino de la Sierra', minAltura: 500, desbloqueado: false },
+    { id: 'montuvio', icono: '🏖️', nombre: 'Montuvio de la Costa', minAltura: 1000, desbloqueado: false },
+    { id: 'shuar', icono: '🌿', nombre: 'Comunidad Shuar', minAltura: 1500, desbloqueado: false },
+    { id: 'isleno', icono: '🐢', nombre: 'Isleño de Galápagos', minAltura: 2000, desbloqueado: false },
+    { id: 'mariachi', icono: '🎻', nombre: 'Músico Andino', minAltura: 2500, desbloqueado: false },
+    { id: 'condor', icono: '🦅', nombre: 'El Cóndor Andino', minAltura: 3000, desbloqueado: false },
+    { id: 'turista', icono: '📸', nombre: 'Turista en el Volcán', minAltura: 3500, desbloqueado: false }
 ];
 
-let skinActiva = 'ecuador';
+let skinActiva = 'chola';
 let alturaMaxima = parseInt(localStorage.getItem('alturaMaxima')) || 0;
 
-// ⚙️ VARIABLES DEL JUEGO
+// --- VARIABLES DEL JUEGO ---
 let velocidad = 0;
 let altura = 0;
 let gravedad = 0.5;
@@ -226,7 +363,7 @@ let nubes = [];
 let posX = window.innerWidth / 2;
 let posY = window.innerHeight - 150;
 
-// ELEMENTOS
+// --- ELEMENTOS DEL DOM ---
 const pantallaInicio = document.getElementById('inicio');
 const pantallaJuego = document.getElementById('juego');
 const btnIniciar = document.getElementById('btnIniciar');
@@ -240,46 +377,72 @@ const listaSkins = document.getElementById('lista-skins');
 jugador.style.left = posX + 'px';
 jugador.style.bottom = posY + 'px';
 
-// 🚀 CONEXIÓN DEL BOTÓN DE INICIO
+// --- FUNCION PRINCIPAL: INICIAR EL JUEGO ---
 btnIniciar.addEventListener('click', () => {
-    pantallaInicio.classList.remove('activa');
-    pantallaJuego.classList.add('activa');
+    pantallaInicio.style.display = 'none';
+    pantallaJuego.style.display = 'block';
     jugando = true;
     crearElementos();
     actualizar();
 });
 
-// 🎮 CONTROLES
-function saltar() { if (!jugando) return; velocidad = fuerzaSalto; }
+// --- FUNCION PARA VOLVER AL INICIO ---
+function volverAlInicio() {
+    // Detener el juego
+    jugando = false;
+    // Limpiar la pantalla
+    obstaculos.forEach(o => o.remove());
+    plataformas.forEach(p => p.remove());
+    nubes.forEach(n => n.remove());
+    obstaculos = [];
+    plataformas = [];
+    nubes = [];
+    mensaje.style.display = 'none';
+    // Mostrar la pantalla de inicio
+    pantallaJuego.style.display = 'none';
+    pantallaInicio.style.display = 'flex';
+}
+
+// --- CONTROLES DEL JUEGO ---
+function saltar() {
+    if (!jugando) return;
+    velocidad = fuerzaSalto;
+    jugador.style.transform = 'translateX(-50%) scale(1.1)';
+    setTimeout(() => {
+        jugador.style.transform = 'translateX(-50%) scale(1)';
+    }, 100);
+}
+
 document.addEventListener('keydown', saltar);
 document.addEventListener('touchstart', saltar);
 document.addEventListener('mousedown', saltar);
 
-// 📦 CREAR ESCENARIO
+// --- CREAR LOS ELEMENTOS DEL ESCENARIO ---
 function crearElementos() {
     // Plataforma inicial
     let platInicio = document.createElement('div');
     platInicio.classList.add('plataforma');
-    platInicio.style.width = '140px';
-    platInicio.style.height = '18px';
-    platInicio.style.left = (window.innerWidth/2 - 70) + 'px';
+    platInicio.style.width = '150px';
+    platInicio.style.height = '20px';
+    platInicio.style.left = (window.innerWidth / 2 - 75) + 'px';
     platInicio.style.bottom = '100px';
     pantallaJuego.appendChild(platInicio);
     plataformas.push(platInicio);
 
-    // Generar plataformas ordenadas
-    for(let i = 1; i < 40; i++) {
+    // Generar plataformas, obstáculos y nubes
+    for (let i = 1; i < 50; i++) {
+        // Plataformas
         let nuevaPlat = document.createElement('div');
         nuevaPlat.classList.add('plataforma');
-        nuevaPlat.style.width = (Math.random() * 80 + 70) + 'px';
-        nuevaPlat.style.height = '14px';
+        nuevaPlat.style.width = (Math.random() * 100 + 80) + 'px';
+        nuevaPlat.style.height = '15px';
         nuevaPlat.style.left = (Math.random() * (window.innerWidth - 150)) + 'px';
         nuevaPlat.style.bottom = (i * 180) + 'px';
         pantallaJuego.appendChild(nuevaPlat);
         plataformas.push(nuevaPlat);
 
-        // Obstáculos espaciados
-        if(Math.random() > 0.7 && i > 5) {
+        // Obstáculos
+        if (Math.random() > 0.7 && i > 5) {
             let obs = document.createElement('div');
             obs.classList.add('obstaculo');
             obs.style.width = '50px';
@@ -290,11 +453,11 @@ function crearElementos() {
             obstaculos.push(obs);
         }
 
-        // Nubes decorativas
+        // Nubes
         let nube = document.createElement('div');
         nube.classList.add('nube');
-        nube.style.width = (Math.random() * 100 + 60) + 'px';
-        nube.style.height = '35px';
+        nube.style.width = (Math.random() * 120 + 80) + 'px';
+        nube.style.height = '40px';
         nube.style.left = (Math.random() * window.innerWidth) + 'px';
         nube.style.bottom = (i * 250 + 80) + 'px';
         pantallaJuego.appendChild(nube);
@@ -302,61 +465,81 @@ function crearElementos() {
     }
 }
 
-// 🔄 BUCLE DEL JUEGO
+// --- BUCLE PRINCIPAL DEL JUEGO ---
 function actualizar() {
     if (!jugando) return;
+
+    // Aplicar gravedad
     velocidad += gravedad;
     posY -= velocidad;
 
-    // Mover cámara suavemente
+    // Mover la cámara y sumar puntos
     if (posY > window.innerHeight / 2.5) {
         altura += 1;
         puntuacionTexto.textContent = 'Altura: ' + altura + ' m';
+        // Mover todos los elementos hacia abajo
         plataformas.forEach(p => p.style.bottom = (parseInt(p.style.bottom) - 1.5) + 'px');
         obstaculos.forEach(o => o.style.bottom = (parseInt(o.style.bottom) - 1.5) + 'px');
         nubes.forEach(n => n.style.bottom = (parseInt(n.style.bottom) - 1) + 'px');
     }
 
-    // Caída
-    if (posY < -50) terminar();
+    // Si el jugador se cae por debajo de la pantalla
+    if (posY < -50) {
+        terminar();
+        return;
+    }
 
-    // Colisiones
+    // Colisión con obstáculos
     obstaculos.forEach(obs => {
         let obsX = parseInt(obs.style.left);
         let obsY = parseInt(obs.style.bottom);
-        if (posX > obsX - 20 && posX < obsX + 50 && posY > obsY - 60 && posY < obsY + 50) terminar();
+        if (posX > obsX - 25 && posX < obsX + 50 && posY > obsY - 60 && posY < obsY + 50) {
+            terminar();
+        }
     });
 
+    // Colisión con plataformas (rebote)
     plataformas.forEach(plat => {
         let platX = parseInt(plat.style.left);
         let platY = parseInt(plat.style.bottom);
-        if (velocidad > 0 && posX > platX - 20 && posX < platX + parseInt(plat.style.width) && posY > platY - 70 && posY < platY + 10) {
+        if (velocidad > 0 && posX > platX - 25 && posX < platX + parseInt(plat.style.width) && posY > platY - 70 && posY < platY + 10) {
             velocidad = fuerzaSalto;
         }
     });
 
+    // Actualizar la posición del jugador
     jugador.style.bottom = posY + 'px';
+
+    // Siguiente fotograma
     requestAnimationFrame(actualizar);
 }
 
-// 📉 TERMINAR
+// --- TERMINAR EL JUEGO ---
 function terminar() {
     jugando = false;
     alturaFinal.textContent = altura;
     mensaje.style.display = 'block';
 
+    // Guardar la altura máxima
     if (altura > alturaMaxima) {
         alturaMaxima = altura;
         localStorage.setItem('alturaMaxima', alturaMaxima);
     }
 
+    // Verificar si se desbloqueó un nuevo personaje
     let desbloqueado = skins.find(s => !s.desbloqueado && altura >= s.minAltura);
-    desbloqueoNuevo.textContent = desbloqueado ? `🎉 ¡Desbloqueaste a ${desbloqueado.nombre}!` : '';
-    desbloqueoNuevo.style.color = '#16A34A';
+    if (desbloqueado) {
+        desbloqueado.desbloqueado = true;
+        desbloqueoNuevo.textContent = `🎉 ¡Desbloqueaste a ${desbloqueado.nombre}!`;
+        desbloqueoNuevo.style.color = '#16A34A';
+    } else {
+        desbloqueoNuevo.textContent = '';
+    }
 }
 
-// 🔁 REINICIAR
+// --- REINICIAR EL JUEGO ---
 function reiniciar() {
+    // Limpiar la pantalla
     obstaculos.forEach(o => o.remove());
     plataformas.forEach(p => p.remove());
     nubes.forEach(n => n.remove());
@@ -365,20 +548,28 @@ function reiniciar() {
     nubes = [];
     mensaje.style.display = 'none';
 
+    // Reiniciar variables
     velocidad = 0;
     altura = 0;
     posX = window.innerWidth / 2;
     posY = window.innerHeight - 150;
     jugando = true;
+
+    // Volver a crear los elementos
     crearElementos();
     actualizar();
 }
 
-// 👕 TIENDA
+// --- FUNCIONES PARA LA TIENDA ---
 function cargarTienda() {
     listaSkins.innerHTML = '';
     skins.forEach(skin => {
-        if (!skin.desbloqueado && alturaMaxima >= skin.minAltura) skin.desbloqueado = true;
+        // Actualizar el estado de desbloqueo según la altura máxima
+        if (!skin.desbloqueado && alturaMaxima >= skin.minAltura) {
+            skin.desbloqueado = true;
+        }
+
+        // Crear la tarjeta del personaje
         const tarjeta = document.createElement('div');
         tarjeta.className = `tarjeta-skin ${skin.id === skinActiva ? 'seleccionada' : ''} ${!skin.desbloqueado ? 'bloqueada' : ''}`;
         tarjeta.innerHTML = `
@@ -386,13 +577,30 @@ function cargarTienda() {
             <div class="nombre-skin">${skin.nombre}</div>
             ${skin.desbloqueado ? '<div class="desbloqueado">✅ Desbloqueado</div>' : `<div class="condicion-skin">🔒 ${skin.minAltura}m</div>`}
         `;
-        if (skin.desbloqueado) tarjeta.onclick = () => { skinActiva = skin.id; jugador.textContent = skin.icono; cargarTienda(); };
+
+        // Si el personaje está desbloqueado, permitir seleccionarlo
+        if (skin.desbloqueado) {
+            tarjeta.onclick = () => {
+                skinActiva = skin.id;
+                jugador.textContent = skin.icono;
+                cargarTienda(); // Recargar la tienda para mostrar la selección
+            };
+        }
+
         listaSkins.appendChild(tarjeta);
     });
 }
 
-function abrirTienda() { pantallaJuego.style.display = 'none'; document.getElementById('tienda').style.display = 'block'; cargarTienda(); }
-function cerrarTienda() { document.getElementById('tienda').style.display = 'none'; pantallaJuego.style.display = 'flex'; }
-</script>
+function abrirTienda() {
+    pantallaJuego.style.display = 'none';
+    document.getElementById('tienda').style.display = 'block';
+    cargarTienda();
+}
+
+function cerrarTienda() {
+    document.getElementById('tienda').style.display = 'none';
+    pantallaJuego.style.display = 'block';
+}
+</script script>
 </body>
 </html>
