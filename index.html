@@ -6,37 +6,184 @@
     <title>Caminante Andante Infinito - Ecuador</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { overflow: hidden; background: linear-gradient(to bottom, #87CEEB, #F0F9FF); }
+        body { overflow: hidden; background: #f0f4f8; }
 
-        /* Pantallas del juego */
+        /* CONTROL DE PANTALLAS */
         .pantalla { display: none; width: 100vw; height: 100vh; position: relative; }
         .activa { display: block; }
 
-        /* Interfaz principal */
-        #juego { width: 100%; height: 100%; }
-        #puntuacion { position: absolute; top: 20px; left: 20px; font-size: 24px; font-weight: bold; color: #1E40AF; z-index: 100; }
-        #boton-tienda { position: absolute; top: 20px; right: 20px; padding: 10px 16px; background: #F59E0B; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; z-index: 100; }
+        /* 🎬 PANTALLA DE INICIO */
+        #inicio {
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F7FA 50%, #F0F9FF 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+        }
+        .logo-juego {
+            font-size: 90px;
+            animation: flotar 3s ease-in-out infinite;
+        }
+        @keyframes flotar {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        #inicio h1 {
+            font-size: 42px;
+            color: #1E40AF;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #inicio p {
+            font-size: 18px;
+            color: #374151;
+            max-width: 350px;
+            text-align: center;
+        }
+        .boton-iniciar {
+            padding: 18px 40px;
+            font-size: 22px;
+            font-weight: bold;
+            background: #16A34A;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(22,163,74,0.3);
+            transition: transform 0.2s;
+        }
+        .boton-iniciar:hover { transform: scale(1.05); }
 
-        /* Mensaje de choque */
-        #mensaje { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 200; display: none; min-width: 300px; }
+        /* 🎮 PANTALLA DE JUEGO (con diseño limpio como en tu imagen) */
+        #juego {
+            background: #f0f0f0;
+            background-image: radial-gradient(#cccccc 20%, transparent 20%);
+            background-position: 0 0;
+            background-size: 40px 40px;
+        }
+        .barra-superior {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.9);
+            border-bottom: 3px solid #16A34A;
+            z-index: 100;
+        }
+        #puntuacion {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1E40AF;
+        }
+        #boton-tienda {
+            padding: 10px 20px;
+            background: #F59E0B;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* MENSAJE DE CHOQUE */
+        #mensaje {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            border: 3px solid #16A34A;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 200;
+            display: none;
+            min-width: 320px;
+        }
         #mensaje h1 { font-size: 36px; color: #DC2626; margin-bottom: 10px; }
         #mensaje p { font-size: 18px; margin-bottom: 20px; color: #374151; }
-        .boton { padding: 12px 24px; font-size: 18px; background: #16A34A; color: white; border: none; border-radius: 12px; cursor: pointer; margin: 5px; font-weight: bold; }
+        .boton {
+            padding: 12px 24px;
+            font-size: 18px;
+            background: #16A34A;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: bold;
+        }
         .boton-secundario { background: #1E40AF; }
 
-        /* Personaje y elementos */
-        #jugador { position: absolute; width: 50px; height: 70px; bottom: 100px; left: 50%; transform: translateX(-50%); z-index: 10; font-size: 50px; display: flex; align-items: center; justify-content: center; }
-        .obstaculo { position: absolute; background: #78716C; border-radius: 5px; }
-        .plataforma { position: absolute; background: #854D0E; border-radius: 5px; }
-        .nube { position: absolute; background: white; border-radius: 50%; opacity: 0.8; }
+        /* PERSONAJE Y ELEMENTOS */
+        #jugador {
+            position: absolute;
+            width: 50px;
+            height: 70px;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            font-size: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .obstaculo { position: absolute; background: #6B7280; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .plataforma { position: absolute; background: #854D0E; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .nube { position: absolute; background: white; border-radius: 50%; opacity: 0.9; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 
         /* TIENDA DE PERSONAJES */
-        #tienda { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 300; padding: 20px; overflow-y: auto; }
-        .cabecera-tienda { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        #tienda {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 300;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .cabecera-tienda {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
         .cabecera-tienda h2 { color: white; font-size: 28px; }
-        .boton-cerrar { background: #DC2626; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .lista-skins { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; }
-        .tarjeta-skin { background: white; border-radius: 12px; padding: 15px; text-align: center; cursor: pointer; border: 3px solid transparent; transition: all 0.2s; }
+        .boton-cerrar {
+            background: #DC2626;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .lista-skins {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+        }
+        .tarjeta-skin {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s;
+        }
         .tarjeta-skin.seleccionada { border-color: #16A34A; background: #F0FDF4; }
         .tarjeta-skin.bloqueada { opacity: 0.6; cursor: not-allowed; }
         .icono-skin { font-size: 45px; margin-bottom: 8px; }
@@ -47,10 +194,20 @@
 </head>
 <body>
 
-<!-- PANTALLA DE JUEGO -->
-<div id="juego" class="pantalla activa">
-    <div id="puntuacion">Altura: 0 m</div>
-    <button id="boton-tienda" onclick="abrirTienda()">👕 Tienda</button>
+<!-- 🎬 PANTALLA DE INICIO -->
+<div id="inicio" class="pantalla activa">
+    <div class="logo-juego">🧑‍🦰✈️</div>
+    <h1>Caminante Andante Infinito</h1>
+    <p>Recorre los cielos de los Andes, supera obstáculos y desbloquea personajes típicos del Ecuador 🇪🇨</p>
+    <button class="boton-iniciar" onclick="empezarJuego()">EMPEZAR A JUGAR</button>
+</div>
+
+<!-- 🎮 PANTALLA DE JUEGO -->
+<div id="juego" class="pantalla">
+    <div class="barra-superior">
+        <div id="puntuacion">Altura: 0 m</div>
+        <button id="boton-tienda" onclick="abrirTienda()">👕 Tienda</button>
+    </div>
 
     <div id="mensaje">
         <h1>¡Choque!</h1>
@@ -63,7 +220,7 @@
     <div id="jugador">🇪🇨</div>
 </div>
 
-<!-- PANTALLA TIENDA DE PERSONAJES -->
+<!-- 👕 PANTALLA TIENDA -->
 <div id="tienda" class="pantalla">
     <div class="cabecera-tienda">
         <h2>Tienda de Personajes 🇪🇨</h2>
@@ -73,7 +230,7 @@
 </div>
 
 <script>
-// 📋 LISTA DE PERSONAJES TÍPICOS
+// 📋 PERSONAJES DISPONIBLES
 const skins = [
     { id: 'ecuador', icono: '🇪🇨', nombre: 'Ecuatoriano', minAltura: 0, desbloqueado: true },
     { id: 'sierra', icono: '🧢', nombre: 'Campesino de la Sierra', minAltura: 500, desbloqueado: false },
@@ -86,20 +243,23 @@ const skins = [
 ];
 
 let skinActiva = 'ecuador';
-let alturaMaxima = localStorage.getItem('alturaMaxima') || 0;
+let alturaMaxima = parseInt(localStorage.getItem('alturaMaxima')) || 0;
 
-// ⚙️ Variables del juego
+// ⚙️ VARIABLES DEL JUEGO
 let velocidad = 0;
 let altura = 0;
 let gravedad = 0.5;
 let fuerzaSalto = -12;
-let jugando = true;
+let jugando = false;
 let obstaculos = [];
 let plataformas = [];
 let nubes = [];
 let posX = window.innerWidth / 2;
 let posY = window.innerHeight - 150;
 
+// ELEMENTOS DEL DOM
+const pantallaInicio = document.getElementById('inicio');
+const pantallaJuego = document.getElementById('juego');
 const jugador = document.getElementById('jugador');
 const puntuacionTexto = document.getElementById('puntuacion');
 const mensaje = document.getElementById('mensaje');
@@ -110,13 +270,22 @@ const listaSkins = document.getElementById('lista-skins');
 jugador.style.left = posX + 'px';
 jugador.style.bottom = posY + 'px';
 
-// 🎮 Controles
+// 🚀 INICIAR DESDE PANTALLA DE INICIO
+function empezarJuego() {
+    pantallaInicio.classList.remove('activa');
+    pantallaJuego.classList.add('activa');
+    jugando = true;
+    crearElementos();
+    actualizar();
+}
+
+// 🎮 CONTROLES
 function saltar() { if (!jugando) return; velocidad = fuerzaSalto; }
 document.addEventListener('keydown', saltar);
 document.addEventListener('touchstart', saltar);
 document.addEventListener('mousedown', saltar);
 
-// 📦 Crear elementos del escenario
+// 📦 CREAR ESCENARIO
 function crearElementos() {
     // Plataforma inicial
     let platInicio = document.createElement('div');
@@ -125,10 +294,10 @@ function crearElementos() {
     platInicio.style.height = '20px';
     platInicio.style.left = (window.innerWidth/2 - 75) + 'px';
     platInicio.style.bottom = '100px';
-    juego.appendChild(platInicio);
+    pantallaJuego.appendChild(platInicio);
     plataformas.push(platInicio);
 
-    // Generar plataformas y obstáculos hacia arriba
+    // Generar elementos hacia arriba
     for(let i = 1; i < 80; i++) {
         let nuevaPlat = document.createElement('div');
         nuevaPlat.classList.add('plataforma');
@@ -136,7 +305,7 @@ function crearElementos() {
         nuevaPlat.style.height = '15px';
         nuevaPlat.style.left = (Math.random() * (window.innerWidth - 150)) + 'px';
         nuevaPlat.style.bottom = (i * 150) + 'px';
-        juego.appendChild(nuevaPlat);
+        pantallaJuego.appendChild(nuevaPlat);
         plataformas.push(nuevaPlat);
 
         if(Math.random() > 0.7 && i > 3) {
@@ -146,7 +315,7 @@ function crearElementos() {
             obs.style.height = '60px';
             obs.style.left = (Math.random() * (window.innerWidth - 100)) + 'px';
             obs.style.bottom = (i * 150 + 30) + 'px';
-            juego.appendChild(obs);
+            pantallaJuego.appendChild(obs);
             obstaculos.push(obs);
         }
 
@@ -156,18 +325,18 @@ function crearElementos() {
         nube.style.height = '40px';
         nube.style.left = (Math.random() * window.innerWidth) + 'px';
         nube.style.bottom = (i * 200 + 100) + 'px';
-        juego.appendChild(nube);
+        pantallaJuego.appendChild(nube);
         nubes.push(nube);
     }
 }
 
-// 🔄 Actualizar juego
+// 🔄 BUCLE DEL JUEGO
 function actualizar() {
     if (!jugando) return;
     velocidad += gravedad;
     posY -= velocidad;
 
-    // Mover cámara y sumar puntos
+    // Mover cámara
     if (posY > window.innerHeight / 2) {
         altura += 2;
         puntuacionTexto.textContent = 'Altura: ' + altura + ' m';
@@ -176,17 +345,17 @@ function actualizar() {
         nubes.forEach(n => n.style.bottom = (parseInt(n.style.bottom) - 1) + 'px');
     }
 
-    // Caída al vacío
+    // Caída
     if (posY < 0) terminar();
 
-    // Colisión con obstáculos
+    // Colisión obstáculos
     obstaculos.forEach(obs => {
         let obsX = parseInt(obs.style.left);
         let obsY = parseInt(obs.style.bottom);
         if (posX > obsX - 25 && posX < obsX + 60 && posY > obsY - 70 && posY < obsY + 60) terminar();
     });
 
-    // Rebote en plataformas
+    // Rebote plataformas
     plataformas.forEach(plat => {
         let platX = parseInt(plat.style.left);
         let platY = parseInt(plat.style.bottom);
@@ -199,19 +368,19 @@ function actualizar() {
     requestAnimationFrame(actualizar);
 }
 
-// 📉 Terminar partida
+// 📉 TERMINAR PARTIDA
 function terminar() {
     jugando = false;
     alturaFinal.textContent = altura;
     mensaje.style.display = 'block';
 
-    // Guardar récord y desbloquear personajes
+    // Guardar récord
     if (altura > alturaMaxima) {
         alturaMaxima = altura;
         localStorage.setItem('alturaMaxima', alturaMaxima);
     }
 
-    // Revisar si desbloqueaste un personaje nuevo
+    // Revisar desbloqueos
     let desbloqueado = skins.find(s => !s.desbloqueado && altura >= s.minAltura);
     if (desbloqueado) {
         desbloqueado.desbloqueado = true;
@@ -222,7 +391,7 @@ function terminar() {
     }
 }
 
-// 🔁 Reiniciar juego
+// 🔁 REINICIAR
 function reiniciar() {
     obstaculos.forEach(o => o.remove());
     plataformas.forEach(p => p.remove());
@@ -241,11 +410,10 @@ function reiniciar() {
     actualizar();
 }
 
-// 👕 TIENDA DE PERSONAJES
+// 👕 TIENDA
 function cargarTienda() {
     listaSkins.innerHTML = '';
     skins.forEach(skin => {
-        // Actualizar desbloqueo según récord
         if (!skin.desbloqueado && alturaMaxima >= skin.minAltura) {
             skin.desbloqueado = true;
         }
@@ -274,19 +442,15 @@ function cargarTienda() {
 }
 
 function abrirTienda() {
-    document.getElementById('juego').classList.remove('activa');
+    pantallaJuego.classList.remove('activa');
     document.getElementById('tienda').classList.add('activa');
     cargarTienda();
 }
 
 function cerrarTienda() {
     document.getElementById('tienda').classList.remove('activa');
-    document.getElementById('juego').classList.add('activa');
+    pantallaJuego.classList.add('activa');
 }
-
-// 🚀 Iniciar todo
-crearElementos();
-actualizar();
 </script>
 </body>
 </html>
