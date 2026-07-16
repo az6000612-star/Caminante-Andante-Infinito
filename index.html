@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caminante hacia el Cielo Andino</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { overflow: hidden; background: linear-gradient(to bottom, #87CEEB, #F0F9FF); }
+        #juego { width: 100vw; height: 100vh; position: relative; }
+        #puntuacion { position: absolute; top: 20px; left: 20px; font-size: 24px; font-weight: bold; color: #1E40AF; z-index: 100; }
+        #mensaje { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 100; display: none; }
+        #mensaje h1 { font-size: 36px; color: #DC2626; margin-bottom: 10px; }
+        #mensaje p { font-size: 18px; margin-bottom: 20px; }
+        button { padding: 12px 24px; font-size: 18px; background: #16A34A; color: white; border: none; border-radius: 12px; cursor: pointer; }
+        #jugador { position: absolute; width: 40px; height: 60px; background: #F59E0B; border-radius: 50% 50% 10% 10%; bottom: 100px; left: 50%; transform: translateX(-50%); z-index: 10; }
+        .ala { position: absolute; width: 30px; height: 15px; background: #FCD34D; border-radius: 50%; top: 15px; }
+        .ala-izq { left: -25px; }
+        .ala-der { right: -25px; }
+        .obstaculo { position: absolute; background: #78716C; border-radius: 5px; }
+        .plataforma { position: absolute; background: #854D0E; border-radius: 5px; }
+        .nube { position: absolute; background: white; border-radius: 50%; opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+<div id="juego">
+    <div id="puntuacion">Altura: 0 m</div>
+
+    <div id="mensaje">
+        <h1>¡Choque!</h1>
+        <p>Llegaste hasta <span id="altura-final">0</span> metros</p>
+        <button onclick="reiniciar()">VOLVER A SUBIR</button>
+    </div>
+
+    <div id="jugador">
+        <div class="ala ala-izq"></div>
+        <div class="ala ala-der"></div>
+    </div>
+</div>
+
+<script>
+const juego = document.getElementById('juego');
+const jugador = document.getElementById('jugador');
+const puntuacionTexto = document.getElementById('puntuacion');
+const mensaje = document.getElementById('mensaje');
+const alturaFinal = document.getElementById('altura-final');
+
+let velocidad = 0;
+let altura = 0;
+let gravedad = 0.5;
+let fuerzaSalto = -12;
+let jugando = true;
+let obstaculos = [];
+let plataformas = [];
+let nubes = [];
+
+let posX = window.innerWidth / 2;
+let posY = window.innerHeight - 150;
+jugador.style.left = posX + 'px';
+jugador.style.bottom = posY + 'px';
+
+function saltar() {
+    if (!jugando) return;
+    velocidad = fuerzaSalto;
+}
+document.addEventListener('keydown', saltar);
+document.addEventListener('touchstart', saltar);
+document.addEventListener('mousedown', saltar);
+
+function crearElementos() {
+    let platInicio = document.createElement('div');
+    platInicio.classList.add('plataforma');
+    platInicio.style.width = '150px';
+    platInicio.style.height = '20px';
+    platInicio.style.left = (window.innerWidth/2 - 75) + 'px';
+    platInicio.style.bottom = '100px';
+    juego.appendChild(platInicio);
+    plataformas.push(platInicio);
+
+    for(let i = 1; i < 50; i++) {
+        let nuevaPlat = document.createElement('div');
+        nuevaPlat.classList.add('plataforma');
+        nuevaPlat.style.width = (Math.random() * 100 + 80) + 'px';
+        nuevaPlat.style.height = '15px';
+        nuevaPlat.style.left = (Math.random() * (window.innerWidth - 150)) + 'px';
+        nuevaPlat.style.bottom = (i * 150) + 'px';
+        juego.appendChild(nuevaPlat);
+        plataformas.push(nuevaPlat);
+
+        if(Math.random() > 0.7 && i > 3) {
+            let obs = document.createElement('div');
+            obs.classList.add('obstaculo');
+            obs.style.width = '60px';
+            obs.style.height = '60px';
+            obs.style.left = (Math.random() * (window.innerWidth - 100)) + 'px';
+            obs.style.bottom = (i * 150 + 30) + 'px';
+            juego.appendChild(obs);
+            obstaculos.push(obs);
+        }
+
+        let nube = document.createElement('div');
+        nube.classList.add('nube');
+        nube.style.width = (Math.random() * 120 + 80) + 'px';
+        nube.style.height = '40px';
+        nube.style.left = (Math.random() * window.innerWidth) + 'px';
+        nube.style.bottom = (i * 200 + 100) + 'px';
+        juego.appendChild(nube);
+        nubes.push(nube);
+    }
+}
+
+function actualizar() {
+    if (!jugando) return;
+
+    velocidad += gravedad;
+    posY -= velocidad;
+
+    if (posY > window.innerHeight / 2) {
+        altura += 2;
+        puntuacionTexto.textContent = 'Altura: ' + altura + ' m';
+        plataformas.forEach(p => p.style.bottom = (parseInt(p.style.bottom) - 2) + 'px');
+        obstaculos.forEach(o => o.style.bottom = (parseInt(o.style.bottom) - 2) + 'px');
+        nubes.forEach(n => n.style.bottom = (parseInt(n.style.bottom) - 2) + 'px');
+    }
+
+    if (posY < 0) {
+        terminar();
+    }
+
+    obstaculos.forEach(obs => {
+        let obsX = parseInt(obs.style.left);
+        let obsY = parseInt(obs.style.bottom);
+        if (posX > obsX - 20 && posX < obsX + 60 && posY > obsY - 60 && posY < obsY + 60) {
+            terminar();
+        }
+    });
+
+    plataformas.forEach(plat => {
+        let platX = parseInt(plat.style.left);
+        let platY = parseInt(plat.style.bottom);
+        if (velocidad > 0 && posX > platX - 20 && posX < platX + parseInt(plat.style.width) && posY > platY - 70 && posY < platY) {
+            velocidad = fuerzaSalto;
+        }
+    });
+
+    jugador.style.bottom = posY + 'px';
+    requestAnimationFrame(actualizar);
+}
+
+function terminar() {
+    jugando = false;
+    alturaFinal.textContent = altura;
+    mensaje.style.display = 'block';
+}
+
+function reiniciar() {
+    obstaculos.forEach(o => o.remove());
+    plataformas.forEach(p => p.remove());
+    nubes.forEach(n => n.remove());
+    obstaculos = [];
+    plataformas = [];
+    nubes = [];
+    mensaje.style.display = 'none';
+
+    velocidad = 0;
+    altura = 0;
+    posX = window.innerWidth / 2;
+    posY = window.innerHeight - 150;
+    jugando = true;
+    crearElementos();
+    actualizar();
+}
+
+crearElementos();
+actualizar();
+</script>
+</body>
+</html>
